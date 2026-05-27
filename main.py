@@ -1,23 +1,13 @@
-import random
-play_again = "yes"
-while play_again == "yes":
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+import os
 
-     secret = random.randint(1,100)
-     guess = 0
-     attempts = 0
+TOKEN = os.getenv("OPENAI_API_KEY")
 
-     while guess != secret:
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Бот работает 🚀")
 
-        guess = int(input("Угадай число от 1 до 100: "))
-        attempts += 1
-        if guess > secret:
-            print("Слишком много братишка")
-        elif guess < secret:
-            print("Слишком мало братишка")   
-        if attempts >= 5: 
-            print("GAME OVER")  
-            break
-        if guess == secret:        
-            print("Тигр!")    
-            print("Количевство попыток:", attempts) 
-     play_again = input("Еще попытку? yes/no: ")
+app = ApplicationBuilder().token(TOKEN).build()
+app.add_handler(CommandHandler("start", start))
+
+app.run_polling()
